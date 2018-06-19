@@ -44,14 +44,14 @@ services:
     environment:
       KAFKA_HOST: kafka:9092
       KAFKA_GROUP: command
-  materializer:
+  projector:
     depends_on:
       - kafka
     build:
-      context: materializer
+      context: projector
     environment:
       KAFKA_HOST: kafka:9092
-      KAFKA_GROUP: materializer
+      KAFKA_GROUP: projector
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USER: commander
