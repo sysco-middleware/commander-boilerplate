@@ -8,10 +8,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/sysco-middleware/commander"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	uuid "github.com/satori/go.uuid"
+	"github.com/sysco-middleware/commander"
 )
 
 var db *gorm.DB
@@ -32,15 +32,23 @@ func (u *User) TableName() string {
 }
 
 func main() {
+	host := os.Getenv("KAFKA_HOST")
+	group := os.Getenv("KAFKA_GROUP")
+
 	db = openDatabase()
 	db.AutoMigrate(&User{})
 
-	server := newCommander()
-	server.HandleEvent(handleEvent)
-	server.ReadMessages()
+	cmd := &commander.Commander{
+		Producer: commander.NewProducer(host),
+		Consumer: commander.NewConsumer(host, group),
+	}
+
+	go cmd.CloseOnSIGTERM()
+	cmd.HandleEvent(eventHandle)
+	cmd.ReadMessages()
 }
 
-func handleEvent(event *commander.Event) {
+func eventHandle(event *commander.Event) {
 	switch event.Operation {
 	case commander.CreateOperation:
 		data := User{}
@@ -93,26 +101,4 @@ func openDatabase() *gorm.DB {
 	}()
 
 	return db
-}
-
-func newCommander() *commander.Commander {
-	host := os.Getenv("KAFKA_HOST")
-	group := os.Getenv("KAFKA_GROUP")
-
-	instance := &commander.Commander{
-		Producer: commander.NewProducer(host),
-		Consumer: commander.NewConsumer(host, group),
-	}
-
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-
-	// Close the kafka connection on SIGTERM
-	go func() {
-		<-sigs
-		instance.Close()
-		os.Exit(0)
-	}()
-
-	return instance
 }
