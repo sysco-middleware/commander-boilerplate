@@ -1,42 +1,39 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/sysco-middleware/commander"
-	"github.com/sysco-middleware/commander/example/webservice/websocket"
-
-	"github.com/gorilla/mux"
-	"github.com/sysco-middleware/commander/example/webservice/commands"
-	"github.com/sysco-middleware/commander/example/webservice/rest"
+	"github.com/sysco-middleware/commander-boilerplate/command/hub"
+	"github.com/sysco-middleware/commander-boilerplate/command/hub/rest"
 )
 
-var server *commander.Commander
-
-func authenticate(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Incomming request:", r.URL)
-		next.ServeHTTP(w, r)
-	})
-}
+var cmd *commander.Commander
 
 func main() {
-	server = commands.NewCommander()
+	host := os.Getenv("KAFKA_HOST")
+	group := os.Getenv("KAFKA_GROUP")
 
-	websocket.NewHub() // Create a new websocket hub to store all active connections
-	router := routes()
+	cmd = &commander.Commander{
+		Producer: commander.NewProducer(host),
+		Consumer: commander.NewConsumer(host, group),
+	}
 
-	go websocket.Consume()
-	go server.ReadMessages()
+	go cmd.ReadMessages()
+	go cmd.CloseOnSIGTERM()
 
-	http.ListenAndServe(":8080", router)
+	// Initialize a new hub
+	hub := hub.NewHub(cmd)
+	hub.Router.HandleFunc("/command/{command}", rest.Use(hub.HandleCommandRequest, authentication)).Methods("POST")
+	hub.Router.HandleFunc("/updates", rest.Use(hub.HandleWebsocketRequest, authentication)).Methods("GET")
+
+	hub.Open()
 }
 
-func routes() *mux.Router {
-	router := rest.Router()
-
-	router.HandleFunc("/command/{command}", rest.Use(commands.Handle, authenticate)).Methods("POST")
-	router.HandleFunc("/updates", rest.Use(websocket.Handle, authenticate)).Methods("GET")
-	return router
+func authentication(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// <- authenticate the user
+		next.ServeHTTP(w, r)
+	})
 }
