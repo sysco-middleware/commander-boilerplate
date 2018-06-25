@@ -4,36 +4,59 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/gorilla/mux"
 	"github.com/sysco-middleware/commander"
-	"github.com/sysco-middleware/commander-boilerplate/command/hub"
-	"github.com/sysco-middleware/commander-boilerplate/command/hub/rest"
+	"github.com/sysco-middleware/commander-boilerplate/command/common"
+	"github.com/sysco-middleware/commander-boilerplate/command/controllers"
+	"github.com/sysco-middleware/commander-boilerplate/command/rest"
+	"github.com/sysco-middleware/commander-boilerplate/command/websocket"
 )
 
-var cmd *commander.Commander
+var (
+	cmd    *commander.Commander
+	socket *websocket.Hub
+	router *mux.Router
+)
 
 func main() {
-	host := os.Getenv("KAFKA_HOST")
+	servers := os.Getenv("KAFKA_SERVERS")
 	group := os.Getenv("KAFKA_GROUP")
 
-	cmd = &commander.Commander{
-		Producer: commander.NewProducer(host),
-		Consumer: commander.NewConsumer(host, group),
+	producer := commander.NewProducer(&kafka.ConfigMap{
+		"bootstrap.servers":    servers,
+		"default.topic.config": kafka.ConfigMap{"auto.offset.reset": "earliest"},
+	})
+
+	consumer := commander.NewConsumer(&kafka.ConfigMap{
+		"bootstrap.servers":    servers,
+		"group.id":             group,
+		"default.topic.config": kafka.ConfigMap{"auto.offset.reset": "earliest"},
+	})
+
+	common.Router = mux.NewRouter()
+	common.Socket = websocket.NewHub()
+
+	common.Commander = &commander.Commander{
+		Consumer: consumer,
+		Producer: producer,
 	}
 
-	go cmd.ReadMessages()
-	go cmd.CloseOnSIGTERM()
+	router.HandleFunc("/command/{command}", rest.Use(controllers.OnCommand, Authentication)).Methods("POST")
+	router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
 
-	// Initialize a new hub
-	hub := hub.NewHub(cmd)
-	hub.Router.HandleFunc("/command/{command}", rest.Use(hub.HandleCommandRequest, authentication)).Methods("POST")
-	hub.Router.HandleFunc("/updates", rest.Use(hub.HandleWebsocketRequest, authentication)).Methods("GET")
+	common.Commander.CloseOnSIGTERM()
+	common.Commander.StartConsuming()
 
-	hub.Open()
+	go controllers.ConsumeEvents()
+	http.ListenAndServe(":8080", router)
 }
 
-func authentication(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// <- authenticate the user
+// Authentication validates if the given request is authenticated.
+// If the request is not authenticated is a 401 returned.
+func Authentication(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// <- authenticate request
 		next.ServeHTTP(w, r)
-	})
+	}
 }

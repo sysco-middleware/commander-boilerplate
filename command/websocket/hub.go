@@ -1,11 +1,5 @@
 package websocket
 
-import (
-	"encoding/json"
-
-	"github.com/sysco-middleware/commander"
-)
-
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -20,41 +14,19 @@ type Hub struct {
 
 	// Unregister requests from clients.
 	Unregister chan *Client
-
-	Commander *commander.Commander
 }
 
 // NewHub create a new hub
-func NewHub(commander *commander.Commander) *Hub {
+func NewHub() *Hub {
 	hub := &Hub{
 		broadcast:  make(chan []byte),
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
 		Clients:    make(map[*Client]bool),
-		Commander:  commander,
 	}
 
-	go hub.consume()
 	go hub.run()
-
 	return hub
-}
-
-func (h *Hub) consume() {
-	consumer := h.Commander.Consume("events")
-
-	for msg := range consumer.Messages {
-		event := commander.Event{}
-		json.Unmarshal(msg.Value, &event)
-
-		data, err := json.Marshal(event)
-
-		if err != nil {
-			continue
-		}
-
-		h.Broadcast(string(data))
-	}
 }
 
 func (h *Hub) run() {
