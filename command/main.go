@@ -56,7 +56,7 @@ func main() {
 // If the request is not authenticated is a 401 returned.
 func Authentication(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// <- authenticate request
+		// <- authenticate request and provide the users dataset key
 		next.ServeHTTP(w, r)
 	}
 }
