@@ -5,6 +5,7 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 	"github.com/sysco-middleware/commander"
+	"github.com/sysco-middleware/commander-boilerplate/service/common"
 )
 
 // CreateModal used during a "create" command
@@ -33,5 +34,6 @@ func OnCreateUser(command *commander.Command) {
 		return
 	}
 
-	command.NewEvent("Created", key, res)
+	event := command.NewEvent("Created", key, res)
+	common.Commander.ProduceEvent(event)
 }

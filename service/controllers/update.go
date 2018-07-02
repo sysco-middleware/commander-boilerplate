@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/sysco-middleware/commander"
+	"github.com/sysco-middleware/commander-boilerplate/service/common"
 )
 
 // UpdateModal used during a "update" command
@@ -31,5 +32,6 @@ func OnUpdateUser(command *commander.Command) {
 		return
 	}
 
-	command.NewEvent("Updated", command.Key, res)
+	event := command.NewEvent("Updated", command.Key, res)
+	common.Commander.ProduceEvent(event)
 }

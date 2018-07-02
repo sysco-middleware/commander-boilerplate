@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/sysco-middleware/commander"
+	"github.com/sysco-middleware/commander-boilerplate/service/common"
 )
 
 // DeleteModal used during a "delete" command
@@ -23,5 +24,6 @@ func OnDeleteUser(command *commander.Command) {
 
 	// ...
 
-	command.NewEvent("Delete", command.Key, nil)
+	event := command.NewEvent("Delete", command.Key, nil)
+	common.Commander.ProduceEvent(event)
 }
