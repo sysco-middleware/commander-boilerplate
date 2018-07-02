@@ -50,13 +50,13 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander"
   packages = ["."]
-  revision = "543b0afb307436766504fa644c17451d09958f3f"
+  revision = "3b5de52c5cf53167f92943fde461498e47112fb1"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
   packages = ["."]
-  revision = "f28cb45dc0f0f406ba2015cdb59a5203ad220bc2"
-  version = "v9.17.1"
+  revision = "ce9336f6e200cbb2e7c5672b36095b03f8bf5af7"
+  version = "v9.19.0"
 
 [solve-meta]
   analyzer-name = "dep"
