@@ -13,12 +13,6 @@ import (
 	"github.com/sysco-middleware/commander-boilerplate/command/websocket"
 )
 
-var (
-	cmd    *commander.Commander
-	socket *websocket.Hub
-	router *mux.Router
-)
-
 func main() {
 	servers := os.Getenv("KAFKA_SERVERS")
 	group := os.Getenv("KAFKA_GROUP")
@@ -42,14 +36,14 @@ func main() {
 		Producer: producer,
 	}
 
-	router.HandleFunc("/command/{command}", rest.Use(controllers.OnCommand, Authentication)).Methods("POST")
-	router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
+	common.Router.HandleFunc("/command/{command}", rest.Use(controllers.OnCommand, Authentication)).Methods("POST")
+	common.Router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
 
 	common.Commander.CloseOnSIGTERM()
 	common.Commander.StartConsuming()
 
 	go controllers.ConsumeEvents()
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":8080", common.Router)
 }
 
 // Authentication validates if the given request is authenticated.
