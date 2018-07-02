@@ -28,8 +28,6 @@ func OnCommand(w http.ResponseWriter, r *http.Request) {
 
 	if sync {
 		event, err := common.Commander.SyncCommand(command)
-		fmt.Println("result from sync command", event.Parent)
-		fmt.Println(event)
 		out, _ := json.Marshal(event)
 		fmt.Println(string(out))
 
