@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -28,8 +26,6 @@ func OnCommand(w http.ResponseWriter, r *http.Request) {
 
 	if sync {
 		event, err := common.Commander.SyncCommand(command)
-		out, _ := json.Marshal(event)
-		fmt.Println(string(out))
 
 		if err != nil {
 			res.SendPanic(err.Error(), command)
