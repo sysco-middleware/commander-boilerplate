@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	// Commander stores the global commander struct
+	// Commander holds the global commander struct
 	Commander *commander.Commander
 
-	// Socket stores the global websocket struct
+	// Socket holds the global websocket struct
 	Socket *websocket.Hub
 
-	// Router stores the global router struct
+	// Router holds the global router struct
 	Router *mux.Router
 )
