@@ -40,7 +40,7 @@ func main() {
 	common.Router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
 
 	common.Commander.CloseOnSIGTERM()
-	common.Commander.StartConsuming()
+	go common.Commander.StartConsuming()
 
 	go controllers.ConsumeEvents()
 	http.ListenAndServe(":8080", common.Router)
