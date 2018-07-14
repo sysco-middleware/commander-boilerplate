@@ -10,3 +10,7 @@ $ docker-compose pull
 $ docker-compose build
 $ docker-compose up -d
 ```
+
+## State
+
+Every part can hold it's own state/view of the source (events). The state can be used to validate uniqueness or fetch the current state of a row.
