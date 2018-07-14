@@ -1,82 +1,69 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
-	"os/signal"
-	"syscall"
-	"time"
 
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sysco-middleware/commander"
+	"github.com/sysco-middleware/commander-boilerplate/projector/common"
+	"github.com/sysco-middleware/commander-boilerplate/projector/controllers"
+	"github.com/sysco-middleware/commander-boilerplate/projector/models"
 )
 
-var db *gorm.DB
-
-// User gorm database table struct
-type User struct {
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-	ID        uuid.UUID `json:"id",gorm:"primary_key"`
-	Username  *string   `json:"username"`
-	Email     *string   `json:"email"`
-}
-
-// TableName table name of User
-func (u *User) TableName() string {
-	return "users"
-}
-
 func main() {
-	host := os.Getenv("KAFKA_HOST")
+	servers := os.Getenv("KAFKA_SERVERS")
 	group := os.Getenv("KAFKA_GROUP")
 
-	db = openDatabase()
-	db.AutoMigrate(&User{})
+	producer := commander.NewProducer(&kafka.ConfigMap{
+		"bootstrap.servers": servers,
+	})
 
-	cmd := &commander.Commander{
-		Producer: commander.NewProducer(host),
-		Consumer: commander.NewConsumer(host, group),
+	consumer := commander.NewConsumer(&kafka.ConfigMap{
+		"bootstrap.servers":               servers,
+		"group.id":                        group,
+		"go.application.rebalance.enable": true,
+		"default.topic.config":            kafka.ConfigMap{"auto.offset.reset": "earliest"},
+	})
+
+	common.Commander = &commander.Commander{
+		Consumer: consumer,
+		Producer: producer,
 	}
 
-	go cmd.CloseOnSIGTERM()
-	cmd.HandleEvent(eventHandle)
-	cmd.ReadMessages()
+	// Let's set the offset of the projector to 0
+	go func() {
+		for event := range common.Commander.Events() {
+			switch message := event.(type) {
+			case kafka.AssignedPartitions:
+				parts := make([]kafka.TopicPartition, 0, len(message.Partitions))
+				for _, part := range message.Partitions {
+					part.Offset = kafka.Offset(0)
+					parts = append(parts, part)
+				}
+
+				common.Commander.Consumer.Assign(parts)
+			case kafka.RevokedPartitions:
+				common.Commander.Consumer.Unassign()
+			}
+		}
+	}()
+
+	common.Database = OpenDatabase()
+	common.Database.AutoMigrate(&models.Users{})
+
+	common.Commander.NewEventHandle("Created", controllers.OnCreatedUser)
+	common.Commander.NewEventHandle("Deleted", controllers.OnDeleteUser)
+	common.Commander.NewEventHandle("Updated", controllers.OnUpdateUser)
+
+	common.Commander.CloseOnSIGTERM()
+	common.Commander.StartConsuming()
 }
 
-func eventHandle(event *commander.Event) {
-	switch event.Operation {
-	case commander.CreateOperation:
-		data := User{}
-		ParseErr := json.Unmarshal(event.Data, &data)
-
-		if ParseErr != nil {
-			panic(ParseErr)
-		}
-
-		data.ID = event.Key
-		db.Create(&data)
-	case commander.UpdateOperation:
-		data := new(map[string]interface{})
-		ParseErr := json.Unmarshal(event.Data, &data)
-
-		if ParseErr != nil {
-			panic(ParseErr)
-		}
-
-		user := User{ID: event.Key}
-		db.Model(&user).Updates(data)
-	case commander.DeleteOperation:
-		user := User{ID: event.Key}
-		db.Delete(&user)
-	}
-}
-
-func openDatabase() *gorm.DB {
+// OpenDatabase opens a new database connection
+func OpenDatabase() *gorm.DB {
 	host := os.Getenv("POSTGRES_HOST")
 	port := os.Getenv("POSTGRES_PORT")
 	user := os.Getenv("POSTGRES_USER")
@@ -89,16 +76,6 @@ func openDatabase() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-
-	// Close the database connection on SIGTERM
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-
-	go func() {
-		<-sigs
-		db.Close()
-		os.Exit(0)
-	}()
 
 	return db
 }
