@@ -50,11 +50,7 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander"
   packages = ["."]
-<<<<<<< HEAD
   revision = "eee6c714798ef16e464185f877c44ca4592dbba3"
-=======
-  revision = "a55e4b4a80e1f6d2d249d51f4fa6c202a1fd95b3"
->>>>>>> 2cc4c40b1fd6935c9068783d6b57c8c69ec3b233
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
@@ -65,6 +61,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "796ded109e93efb7df5553ce13b227405156ae777b0c442401162900f3e7789a"
+  inputs-digest = "a321802acc879d8915e34065566bf65a1b79ba33a451c6c6d1f0e65039d0db3b"
   solver-name = "gps-cdcl"
   solver-version = 1
