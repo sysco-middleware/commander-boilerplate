@@ -50,7 +50,11 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander"
   packages = ["."]
+<<<<<<< HEAD
   revision = "eee6c714798ef16e464185f877c44ca4592dbba3"
+=======
+  revision = "a55e4b4a80e1f6d2d249d51f4fa6c202a1fd95b3"
+>>>>>>> 2cc4c40b1fd6935c9068783d6b57c8c69ec3b233
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
