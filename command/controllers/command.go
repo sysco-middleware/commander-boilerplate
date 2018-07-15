@@ -32,6 +32,11 @@ func OnCommand(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		if !event.Acknowledged {
+			res.SendPanic(event.Action, event)
+			return
+		}
+
 		res.SendOK(event)
 		return
 	}
