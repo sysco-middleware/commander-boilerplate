@@ -15,12 +15,16 @@ func OnCreatedUser(command *commander.Event) {
 	dataParseError := json.Unmarshal(command.Data, &user)
 	// Parse the data back to a struct
 	if dataParseError != nil {
-		panic(dataParseError)
+		// Optionally could you panic on a error
+		// panic(dataParseError)
+		return
 	}
 
 	query := common.Database.Create(&user)
 	// A user already exists if a error occures
 	if query.Error != nil {
-		panic(query.Error)
+		// Optionally could you panic on a error
+		// panic(query.Error)
+		return
 	}
 }
