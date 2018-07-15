@@ -29,6 +29,7 @@ services:
   service:
     depends_on:
       - kafka
+      - postgres
     build:
       context: service
     environment:
@@ -47,6 +48,7 @@ services:
   projector:
     depends_on:
       - kafka
+      - postgres
     build:
       context: projector
     environment:
