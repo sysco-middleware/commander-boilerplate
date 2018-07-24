@@ -1,5 +1,7 @@
 This is a boilerplate project for [commander](https://github.com/sysco-middleware/commander).
 
+![The pattern](https://github.com/sysco-middleware/commander/wiki/commander-pattern.jpg)
+
 ## Getting started
 
 In order to get started do you need to have [`docker`](https://docs.docker.com/install/) and [`docker-compose`](https://docs.docker.com/compose/install/) installed.
@@ -10,6 +12,14 @@ $ docker-compose pull
 $ docker-compose build
 $ docker-compose up -d
 ```
+
+Or you could run every service manually by starting up `kafka` and `postgres`.
+
+```bash
+$ docker-compose up -d kafka postgres
+```
+
+Every service has it's own
 
 ## State
 
