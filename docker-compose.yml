@@ -26,12 +26,12 @@ services:
       POSTGRES_USER: commander
       POSTGRES_PASSWORD: TFgvT3Pb3bWEhXKAfgMk63bo
       POSTGRES_DB: commander
-  service:
+  logic:
     depends_on:
       - kafka
       - postgres
     build:
-      context: service
+      context: logic
     environment:
       KAFKA_SERVERS: kafka:9092
       KAFKA_GROUP: users
