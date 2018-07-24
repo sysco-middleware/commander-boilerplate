@@ -6,6 +6,9 @@ ENV GO_PROJECT_PATH=query
 WORKDIR /go/src/${GO_PROJECT_PATH}
 COPY . .
 
+RUN apk update && apk upgrade && \
+    apk add bash git openssh
+
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN dep ensure
 RUN go build -o build .

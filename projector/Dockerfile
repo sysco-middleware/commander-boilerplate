@@ -9,7 +9,7 @@ WORKDIR /go/src/${GO_PROJECT_PATH}
 COPY . .
 
 # Install librdkafka
-RUN apk update && \
+RUN apk update && apk upgrade && \
     apk add libressl${LIBRESSL_VERSION}-libcrypto libressl${LIBRESSL_VERSION}-libssl --update-cache --repository http://nl.alpinelinux.org/alpine/edge/main && \
     apk add librdkafka=${LIBRDKAFKA_VERSION} --update-cache --repository http://nl.alpinelinux.org/alpine/edge/community && \
     apk add librdkafka-dev=${LIBRDKAFKA_VERSION} --update-cache --repository http://nl.alpinelinux.org/alpine/edge/community && \
