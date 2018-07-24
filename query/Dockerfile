@@ -7,7 +7,7 @@ WORKDIR /go/src/${GO_PROJECT_PATH}
 COPY . .
 
 RUN apk update && apk upgrade && \
-    apk add bash git openssh
+    apk add git openssh
 
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN dep ensure
