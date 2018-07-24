@@ -13,13 +13,7 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
-Or you could run every service manually by starting up `kafka` and `postgres`.
-
-```bash
-$ docker-compose up -d kafka postgres
-```
-
-Every service has it's own
+Or you could run every service manually.
 
 ## State
 
