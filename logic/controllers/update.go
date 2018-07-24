@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/sysco-middleware/commander"
-	"github.com/sysco-middleware/commander-boilerplate/service/common"
+	"github.com/sysco-middleware/commander-boilerplate/logic/common"
 )
 
 // UpdateModal used during a "update" command

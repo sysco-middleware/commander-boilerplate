@@ -6,7 +6,7 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 	"github.com/sysco-middleware/commander"
-	"github.com/sysco-middleware/commander-boilerplate/service/common"
+	"github.com/sysco-middleware/commander-boilerplate/logic/common"
 )
 
 // CreateModal is used during a "create" command

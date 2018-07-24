@@ -42,11 +42,11 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander"
   packages = ["."]
-  revision = "f97b08d8cbb8a83fd08230ebd3a1b2292e5949d0"
+  revision = "d3b31824c272a8e3c2e030e2239a25bcd4324e28"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "04b7e76da5db9f5aa40fda95e64d3ed6e64e0055c3871cfed426a845b950c5fe"
+  inputs-digest = "709115efe45a11fc4b9dd14b9fdcb1a9dc4fd54a502a66642e4ea013d7481f10"
   solver-name = "gps-cdcl"
   solver-version = 1

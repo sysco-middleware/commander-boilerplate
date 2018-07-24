@@ -8,8 +8,8 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/sysco-middleware/commander"
-	"github.com/sysco-middleware/commander-boilerplate/service/common"
-	"github.com/sysco-middleware/commander-boilerplate/service/controllers"
+	"github.com/sysco-middleware/commander-boilerplate/logic/common"
+	"github.com/sysco-middleware/commander-boilerplate/logic/controllers"
 )
 
 func main() {
