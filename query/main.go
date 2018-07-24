@@ -19,7 +19,7 @@ func main() {
 
 	common.Router.HandleFunc("/find/{id}", rest.Use(controllers.FindByID, Authentication)).Methods("GET")
 
-	http.ListenAndServe(":8070", common.Router)
+	http.ListenAndServe(":8080", common.Router)
 }
 
 // Authentication validates if the given request is authenticated.
