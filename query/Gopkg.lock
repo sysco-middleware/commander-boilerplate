@@ -50,7 +50,7 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander-boilerplate"
   packages = ["projector/models"]
-  revision = "92313156671966e220b4bdb8bb98ca64094f4cc9"
+  revision = "ec8610003d5f67f5f0eb18a376809b94d9d8475e"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
