@@ -4,8 +4,10 @@ This is a boilerplate project for [commander](https://github.com/sysco-middlewar
 
 ## Getting started
 
-Check out the README in the docker directory. Or you could run every service manually. When wanting to run a service manually make sure to have the required `environment` variables set.
+You could run the boilerplate project in 2 ways:
 
-## State
+- Build and run the docker containers
+- Run every service manually
 
-Every service can hold it's own state/view of the source (events). The state can be used to validate uniqueness or fetch the current state of a row.
+To run the docker containers check out the README in the `docker` directory.
+To run every service manually make sure to have the required dependencies running and the `environment` variables set.
