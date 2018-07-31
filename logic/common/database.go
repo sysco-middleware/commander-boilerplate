@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Database holds the global database struct
+// Database holds the global grom database struct
 var Database *gorm.DB
 
 // OpenDatabase opens a new database connection
@@ -26,5 +26,5 @@ func OpenDatabase() *gorm.DB {
 	}
 
 	Database = db
-	return db
+	return Database
 }
