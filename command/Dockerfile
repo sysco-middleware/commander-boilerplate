@@ -20,7 +20,7 @@ RUN dep ensure
 RUN go build -o build .
 
 # Final
-FROM alpine
+FROM alpine as final
 
 ENV GO_PROJECT_PATH=webservice
 ENV LIBRESSL_VERSION=2.7
