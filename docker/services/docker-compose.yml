@@ -1,43 +1,8 @@
 version: '3.4'
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:4.1.0
-    environment:
-      - ZOOKEEPER_CLIENT_PORT=2181
-    ports:
-      - 2181:2181
-    networks:
-      - kafka
-  kafka:
-    depends_on:
-      - zookeeper
-    image: confluentinc/cp-kafka:4.1.0
-    environment:
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-    ports:
-      - 9092:9092
-    networks:
-      - kafka
-  postgres:
-    image: postgres:9.5.3
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: commander
-      POSTGRES_PASSWORD: TFgvT3Pb3bWEhXKAfgMk63bo
-      POSTGRES_DB: commander
-    networks:
-      - postgres
   logic:
-    depends_on:
-      - kafka
-      - postgres
     build:
-      context: logic
+      context: ../../logic
       target: final
     environment:
       KAFKA_SERVERS: kafka:9092
@@ -51,24 +16,19 @@ services:
       - postgres
       - kafka
   command:
-    depends_on:
-      - kafka
     build:
-      context: command
+      context: ../../command
       target: final
     ports:
-      - "5050:8080"
+      - 5050:8080
     environment:
       KAFKA_SERVERS: kafka:9092
       KAFKA_GROUP: command
     networks:
       - kafka
   projector:
-    depends_on:
-      - kafka
-      - postgres
     build:
-      context: projector
+      context: ../../projector
       target: final
     environment:
       KAFKA_SERVERS: kafka:9092
@@ -82,13 +42,11 @@ services:
       - kafka
       - postgres
   query:
-    depends_on:
-      - postgres
     build:
-      context: query
+      context: ../../query
       target: final
     ports:
-      - "5060:8080"
+      - 5060:8080
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
@@ -97,10 +55,10 @@ services:
       POSTGRES_DB: commander
     networks:
       - postgres
-volumes:
-  zookeeper:
-  kafka:
-  postgres:
 networks:
   kafka:
+    external:
+      name: kafka
   postgres:
+    external:
+      name: postgres
