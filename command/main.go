@@ -9,17 +9,17 @@ import (
 )
 
 func main() {
-	common.OpenWebHub()
-	common.OpenCommander()
+	router, _ := common.OpenWebHub()
+	commander := common.OpenCommander()
 
-	common.Router.HandleFunc("/command/{command}", rest.Use(controllers.OnCommand, Authentication)).Methods("POST")
-	common.Router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
+	router.HandleFunc("/command/{command}", rest.Use(controllers.OnCommand, Authentication)).Methods("POST")
+	router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
 
-	common.Commander.CloseOnSIGTERM()
-	go common.Commander.StartConsuming()
+	commander.CloseOnSIGTERM()
+	go commander.StartConsuming()
 	go controllers.ConsumeEvents()
 
-	http.ListenAndServe(":8080", common.Router)
+	http.ListenAndServe(":8080", router)
 }
 
 // Authentication validates if the given request is authenticated.

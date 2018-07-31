@@ -6,6 +6,7 @@ import "github.com/gorilla/mux"
 var Router *mux.Router
 
 // OpenWebHub opens a new router interface
-func OpenWebHub() {
+func OpenWebHub() *mux.Router {
 	Router = mux.NewRouter()
+	return Router
 }

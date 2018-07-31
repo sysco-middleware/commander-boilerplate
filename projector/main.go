@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-	common.OpenCommander()
-	common.OpenDatabase()
+	commander := common.OpenCommander()
+	database := common.OpenDatabase()
 
 	// Let's set the offset of the projector to 0
 	go func() {
-		for event := range common.Commander.Events() {
+		for event := range commander.Events() {
 			switch message := event.(type) {
 			case kafka.AssignedPartitions:
 				parts := make([]kafka.TopicPartition, 0, len(message.Partitions))
@@ -23,19 +23,19 @@ func main() {
 					parts = append(parts, part)
 				}
 
-				common.Commander.Consumer.Assign(parts)
+				commander.Consumer.Assign(parts)
 			case kafka.RevokedPartitions:
-				common.Commander.Consumer.Unassign()
+				commander.Consumer.Unassign()
 			}
 		}
 	}()
 
-	common.Database.AutoMigrate(&models.Users{})
+	database.AutoMigrate(&models.Users{})
 
-	common.Commander.NewEventHandle("Created", controllers.OnCreatedUser)
-	common.Commander.NewEventHandle("Deleted", controllers.OnDeleteUser)
-	common.Commander.NewEventHandle("Updated", controllers.OnUpdateUser)
+	commander.NewEventHandle("Created", controllers.OnCreatedUser)
+	commander.NewEventHandle("Deleted", controllers.OnDeleteUser)
+	commander.NewEventHandle("Updated", controllers.OnUpdateUser)
 
-	common.Commander.CloseOnSIGTERM()
-	common.Commander.StartConsuming()
+	commander.CloseOnSIGTERM()
+	commander.StartConsuming()
 }

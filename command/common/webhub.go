@@ -14,7 +14,9 @@ var (
 )
 
 // OpenWebHub opens a new socket and router interface
-func OpenWebHub() {
+func OpenWebHub() (*mux.Router, *websocket.Hub) {
 	Router = mux.NewRouter()
 	Socket = websocket.NewHub()
+
+	return Router, Socket
 }

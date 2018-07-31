@@ -7,15 +7,15 @@ import (
 )
 
 func main() {
-	common.OpenDatabase()
-	common.OpenCommander()
+	database := common.OpenDatabase()
+	commander := common.OpenCommander()
 
-	common.Database.AutoMigrate(&controllers.UserModel{})
+	database.AutoMigrate(&controllers.UserModel{})
 
-	common.Commander.NewCommandHandle("Create", controllers.OnCreateUser)
-	common.Commander.NewCommandHandle("Update", controllers.OnUpdateUser)
-	common.Commander.NewCommandHandle("Delete", controllers.OnDeleteUser)
+	commander.NewCommandHandle("Create", controllers.OnCreateUser)
+	commander.NewCommandHandle("Update", controllers.OnUpdateUser)
+	commander.NewCommandHandle("Delete", controllers.OnDeleteUser)
 
-	common.Commander.CloseOnSIGTERM()
-	common.Commander.StartConsuming()
+	commander.CloseOnSIGTERM()
+	commander.StartConsuming()
 }

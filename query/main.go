@@ -11,11 +11,11 @@ import (
 
 func main() {
 	common.OpenDatabase()
-	common.OpenWebHub()
+	router := common.OpenWebHub()
 
-	common.Router.HandleFunc("/find/{id}", rest.Use(controllers.FindByID, Authentication)).Methods("GET")
+	router.HandleFunc("/find/{id}", rest.Use(controllers.FindByID, Authentication)).Methods("GET")
 
-	http.ListenAndServe(":8080", common.Router)
+	http.ListenAndServe(":8080", router)
 }
 
 // Authentication validates if the given request is authenticated.
