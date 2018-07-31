@@ -4,16 +4,7 @@ This is a boilerplate project for [commander](https://github.com/sysco-middlewar
 
 ## Getting started
 
-In order to get started do you need to have [`docker`](https://docs.docker.com/install/) and [`docker-compose`](https://docs.docker.com/compose/install/) installed.
-Clone the master branch of this repository and pull the latest docker images. Once the images are pulled can you build and start the services.
-
-```bash
-$ docker-compose pull
-$ docker-compose build
-$ docker-compose up -d
-```
-
-Or you could run every service manually.
+Check out the README in the docker directory. Or you could run every service manually. When wanting to run a service manually make sure to have the required `environment` variables set.
 
 ## State
 
