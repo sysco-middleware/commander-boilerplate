@@ -4,6 +4,8 @@ services:
     build:
       context: ../../logic
       target: final
+      args:
+        GO_PROJECT_PATH: github.com/sysco-middleware/commander-boilerplate/logic
     environment:
       KAFKA_SERVERS: kafka:9092
       KAFKA_GROUP: users
@@ -19,6 +21,8 @@ services:
     build:
       context: ../../command
       target: final
+      args:
+        GO_PROJECT_PATH: github.com/sysco-middleware/commander-boilerplate/command
     ports:
       - 5050:8080
     environment:
@@ -30,6 +34,8 @@ services:
     build:
       context: ../../projector
       target: final
+      args:
+        GO_PROJECT_PATH: github.com/sysco-middleware/commander-boilerplate/projector
     environment:
       KAFKA_SERVERS: kafka:9092
       KAFKA_GROUP: projector
@@ -45,6 +51,8 @@ services:
     build:
       context: ../../query
       target: final
+      args:
+        GO_PROJECT_PATH: github.com/sysco-middleware/commander-boilerplate/query
     ports:
       - 5060:8080
     environment:
