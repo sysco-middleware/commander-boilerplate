@@ -38,3 +38,37 @@ func FindByID(w http.ResponseWriter, r *http.Request) {
 
 	res.SendOK(user)
 }
+
+// FindAll returns all users found in the database
+func FindAll(w http.ResponseWriter, r *http.Request) {
+	res := rest.Response{ResponseWriter: w}
+
+	users := []models.Users{}
+	query := common.Database.Find(&users)
+
+	if query.Error != nil {
+		res.SendPanic(query.Error.Error(), nil)
+		return
+	}
+
+	res.SendOK(users)
+}
+
+// FindByLastName returns all that have the given first name
+func FindByLastName(w http.ResponseWriter, r *http.Request) {
+	res := rest.Response{ResponseWriter: w}
+	vars := mux.Vars(r)
+
+	// Given first name
+	lastName := vars["lastName"]
+
+	users := []models.Users{}
+	query := common.Database.Where(models.Users{LastName: lastName}).Find(&users)
+
+	if query.Error != nil {
+		res.SendPanic(query.Error.Error(), nil)
+		return
+	}
+
+	res.SendOK(users)
+}
