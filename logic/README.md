@@ -1,19 +1,22 @@
 # Logic
 
-The logic service consumes commands which results in events.
+The logic service consumes commands which should always result in a resulting event.
 
 ## Getting started
 
 To run the service manually for example during development.
-Make sure that you have the environment variables set and have `kafka` and `postgres` running.
+Make sure that you have the `environment` variables set and have `kafka` and `postgres` running.
 
 ```bash
-$ # ... import the environment variables
+$ # cd docker/dependencies
 $ docker-compose up -d kafka postgres
+$ # cd logic/
 $ go run main.go
 ```
 
 ## Environment variables
+
+These are the required environment variables.
 
 ```bash
 export KAFKA_GROUP=users

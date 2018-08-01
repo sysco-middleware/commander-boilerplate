@@ -1,20 +1,22 @@
 # Query
 
-The query service is accessable to the consumer api or third party clients.
+The query service is accessible to the consumer facing api or any third party clients.
 This service preforms queries on the projections created by the projectors.
 
 ## Getting started
 
-To run the service manually for example during development.
-Make sure that you have the environment variables set and have `postgres` running.
+To run the service manually for example during development make sure that you have all `environment` variables set and have `postgres` running.
 
 ```bash
-$ # ... import the environment variables
+$ # cd docker/dependencies
 $ docker-compose up -d postgres
+$ # cd query/
 $ go run main.go
 ```
 
 ## Environment variables
+
+These are the required environment variables.
 
 ```bash
 export POSTGRES_HOST=postgres

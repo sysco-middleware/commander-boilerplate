@@ -12,3 +12,6 @@ Clone the master branch of this repository. Once you have the repo can you build
 $ docker-compose build
 $ docker-compose up -d
 ```
+
+NOTE:
+The project path should not end with a `/`
