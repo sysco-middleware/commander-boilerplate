@@ -30,7 +30,10 @@
 
 [[projects]]
   name = "github.com/jinzhu/gorm"
-  packages = ["."]
+  packages = [
+    ".",
+    "dialects/postgres"
+  ]
   revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
   version = "v1.9.1"
 
@@ -41,16 +44,20 @@
   revision = "04140366298a54a039076d798123ffa108fff46c"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/lib/pq"
+  packages = [
+    ".",
+    "hstore",
+    "oid"
+  ]
+  revision = "90697d60dd844d5ef6ff15135d0203f65d2f53b8"
+
+[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
   version = "v1.2.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/sysco-middleware/commander-boilerplate"
-  packages = ["projector/models"]
-  revision = "ec8610003d5f67f5f0eb18a376809b94d9d8475e"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
@@ -61,6 +68,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c718b14469ec9439ce161c9ef72353093ea2cf0cb1a5048840b69dab7f65ca1a"
+  inputs-digest = "26aa083c800a3ac85e085817a613352693f71a4c313094816f4dbaeb0eb4f20f"
   solver-name = "gps-cdcl"
   solver-version = 1
