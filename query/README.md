@@ -24,4 +24,5 @@ export POSTGRES_PORT=5432
 export POSTGRES_USER=commander
 export POSTGRES_PASSWORD=TFgvT3Pb3bWEhXKAfgMk63bo
 export POSTGRES_DB=commander
+export HOST_ADDRESS=:8080
 ```

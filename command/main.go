@@ -19,7 +19,14 @@ func main() {
 	go commander.StartConsuming()
 	go controllers.ConsumeEvents()
 
-	http.ListenAndServe(":8080", router)
+	server := &http.Server{
+		Addr:         os.Getenv("HOST_ADDRESS"),
+		Handler:      router,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	server.ListenAndServe()
 }
 
 // Authentication validates if the given request is authenticated.

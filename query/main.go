@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+	"os"
+	"time"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/sysco-middleware/commander-boilerplate/query/common"
@@ -17,7 +19,14 @@ func main() {
 	router.HandleFunc("/find/", rest.Use(controllers.FindAll, Authentication)).Methods("GET")
 	router.HandleFunc("/find/name/last/{lastName}", rest.Use(controllers.FindByLastName, Authentication)).Methods("GET")
 
-	http.ListenAndServe(":8080", router)
+	server := &http.Server{
+		Addr:         os.Getenv("HOST_ADDRESS"),
+		Handler:      router,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	server.ListenAndServe()
 }
 
 // Authentication validates if the given request is authenticated.
