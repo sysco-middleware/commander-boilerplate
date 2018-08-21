@@ -21,3 +21,16 @@ $ # cd docker/services/
 $ docker-compose build
 $ docker-compose up -d
 ```
+
+## Dependencies
+
+Commander requires the following dependencies:
+
+- Kafka (kafka)
+- Postgres (postgres)
+
+There are also a couple of optional dependencies available:
+
+- Zookeeper (zookeeper)
+- Confluent Schema Registry (cp-schema-registry)
+- Confluent Kafka Rest (cp-kafka-rest)

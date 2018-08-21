@@ -4,13 +4,3 @@ services:
     image: syscomiddleware/commander-build
     build:
       context: commander-build
-      args:
-        LIBRESSL_VERSION: 2.7
-        LIBRDKAFKA_VERSION: 0.11.4-r1
-  commander-final:
-    image: syscomiddleware/commander-final
-    build:
-      context: commander-final
-      args:
-        LIBRESSL_VERSION: 2.7
-        LIBRDKAFKA_VERSION: 0.11.4-r1
