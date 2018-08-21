@@ -32,6 +32,6 @@ func OnUpdateUser(command *commander.Command) {
 		return
 	}
 
-	event := command.NewEvent("Updated", command.Key, res)
+	event := command.NewEvent("Updated", 1, command.Key, res)
 	common.Commander.ProduceEvent(event)
 }

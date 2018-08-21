@@ -20,10 +20,12 @@ These are the required environment variables.
 
 ```bash
 export KAFKA_GROUP=users
-export KAFKA_SERVERS=kafka:9092
+export KAFKA_BROKERS=kafka:9092
 export POSTGRES_HOST=postgres
 export POSTGRES_PORT=5432
 export POSTGRES_USER=commander
 export POSTGRES_PASSWORD=TFgvT3Pb3bWEhXKAfgMk63bo
 export POSTGRES_DB=commander
+export COMMANDER_EVENT_TOPIC=events
+export COMMANDER_COMMAND_TOPIC=commands
 ```
