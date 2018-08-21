@@ -25,6 +25,14 @@ var (
 // WebSocket connection.
 var Upgrader = websocket.Upgrader{}
 
+// Restrictions contain the restrictions of a client
+// Once a message is received is checked if the given client is restricted
+// to receive that message.
+type Restrictions struct {
+	EventTypes []string
+	DataSets   []string
+}
+
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
 	Hub *Hub
@@ -33,7 +41,8 @@ type Client struct {
 	Conn *websocket.Conn
 
 	// Buffered channel of outbound messages.
-	Send chan []byte
+	Send         chan []byte
+	Restrictions *Restrictions
 }
 
 // WritePump pumps messages from the hub to the websocket connection.

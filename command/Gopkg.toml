@@ -26,8 +26,12 @@
 
 
 [[constraint]]
-  name = "github.com/confluentinc/confluent-kafka-go"
-  version = "0.11.4"
+  name = "github.com/Shopify/sarama"
+  version = "1.17.0"
+
+[[constraint]]
+  name = "github.com/bsm/sarama-cluster"
+  version = "2.1.15"
 
 [[constraint]]
   name = "github.com/gorilla/mux"
@@ -43,7 +47,7 @@
 
 [[constraint]]
   name = "gopkg.in/go-playground/validator.v9"
-  version = "9.20.2"
+  version = "9.21.0"
 
 [prune]
   go-tests = true

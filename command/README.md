@@ -21,6 +21,8 @@ These are the required environment variables.
 
 ```bash
 export KAFKA_GROUP=command
-export KAFKA_SERVERS=kafka:9092
+export KAFKA_BROKERS=kafka:9092
+export COMMANDER_EVENT_TOPIC=events
+export COMMANDER_COMMAND_TOPIC=commands
 export HOST_ADDRESS=:7070
 ```

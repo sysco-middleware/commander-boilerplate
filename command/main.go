@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/sysco-middleware/commander-boilerplate/command/common"
 	"github.com/sysco-middleware/commander-boilerplate/command/controllers"
@@ -13,10 +15,9 @@ func main() {
 	commander := common.OpenCommander()
 
 	router.HandleFunc("/command/{command}", rest.Use(controllers.OnCommand, Authentication)).Methods("POST")
-	router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Authentication)).Methods("GET")
+	router.HandleFunc("/updates", rest.Use(controllers.OnWebsocket, Restrictions, Authentication)).Methods("GET")
 
-	commander.CloseOnSIGTERM()
-	go commander.StartConsuming()
+	go commander.CloseOnSIGTERM()
 	go controllers.ConsumeEvents()
 
 	server := &http.Server{
@@ -26,6 +27,7 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
+	go commander.Consume()
 	server.ListenAndServe()
 }
 
@@ -34,6 +36,18 @@ func main() {
 func Authentication(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// <- authenticate request and provide the users dataset key
+		next.ServeHTTP(w, r)
+	}
+}
+
+// Restrictions sets the restriction headers
+// of the request (ex. DataSets and EventTypes).
+func Restrictions(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// <- set restrictions
+		r.Header.Set("DATASETS", "*")
+		r.Header.Set("EVENT_TYPES", "*")
+
 		next.ServeHTTP(w, r)
 	}
 }
