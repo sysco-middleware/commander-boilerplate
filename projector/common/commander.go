@@ -18,6 +18,7 @@ func OpenCommander() *commander.Commander {
 	group := os.Getenv("KAFKA_GROUP")
 
 	config := commander.NewConfig()
+	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 	config.Version = sarama.V1_1_0_0
 
 	Commander = &commander.Commander{
