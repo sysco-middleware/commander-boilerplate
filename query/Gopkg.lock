@@ -63,17 +63,17 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander-boilerplate"
   packages = ["projector/models"]
-  revision = "5e86efd7f3892e4c0f0a7d8203cc040813840c88"
+  revision = "68a92b312feee814ea1cea573ed47458572dbb85"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
   packages = ["."]
-  revision = "ab2a8a99087e827c9af87ed6777ba897348fb178"
-  version = "v9.20.2"
+  revision = "e69e9a28bb62b977fdc58d051f1bb477b7cbe486"
+  version = "v9.21.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0a8bd82e08f78dab7370a296c5b1642a9cccf6a32f35540ed5ab13885cab4a31"
+  inputs-digest = "d863a76f516f082eb482393c4fc08703548bc2e5191dd3049f9f74810681e286"
   solver-name = "gps-cdcl"
   solver-version = 1
