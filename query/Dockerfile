@@ -1,16 +1,12 @@
 # Builder
-FROM golang:1.10-alpine AS builder
+FROM syscomiddleware/commander-build AS builder
 
 ARG GO_PROJECT_PATH=${GO_PROJECT_PATH}
 
 WORKDIR /go/src/${GO_PROJECT_PATH}
 COPY . .
 
-RUN apk update && apk upgrade && \
-    apk add git openssh
-
-RUN go get -u github.com/golang/dep/cmd/dep
-RUN dep ensure -v
+RUN dep ensure
 RUN go build -o build .
 
 # Final

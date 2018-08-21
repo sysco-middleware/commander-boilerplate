@@ -10,7 +10,7 @@ RUN dep ensure
 RUN go build -o build .
 
 # Final
-FROM syscomiddleware/commander-final as final
+FROM alpine as final
 
 ARG GO_PROJECT_PATH=${GO_PROJECT_PATH}
 
