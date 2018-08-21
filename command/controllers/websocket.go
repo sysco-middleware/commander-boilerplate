@@ -22,6 +22,7 @@ func ConsumeEvents() {
 			continue
 		}
 
+		// TODO: events should never be broadcasted
 		common.Socket.Broadcast(string(data))
 	}
 }

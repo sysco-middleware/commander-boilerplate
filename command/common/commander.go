@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Shopify/sarama"
-	cluster "github.com/bsm/sarama-cluster"
 	"github.com/sysco-middleware/commander"
 )
 
@@ -18,11 +17,8 @@ func OpenCommander() *commander.Commander {
 	brokers := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
 	group := os.Getenv("KAFKA_GROUP")
 
-	producerConfig := sarama.NewConfig()
-	consumerConfig := cluster.NewConfig()
-
-	producerConfig.Version = sarama.V1_1_0_0
-	consumerConfig.Version = sarama.V1_1_0_0
+	config := commander.NewConfig()
+	config.Version = sarama.V1_1_0_0
 
 	Commander = &commander.Commander{
 		ConsumerGroup: group,
@@ -31,8 +27,8 @@ func OpenCommander() *commander.Commander {
 		CommandTopic:  os.Getenv("COMMANDER_COMMAND_TOPIC"),
 	}
 
-	Commander.NewProducer(brokers, producerConfig)
-	Commander.NewConsumer(brokers, consumerConfig)
+	Commander.NewProducer(brokers, config)
+	Commander.NewConsumer(brokers, config)
 
 	return Commander
 }

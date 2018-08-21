@@ -93,7 +93,7 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander"
   packages = ["."]
-  revision = "f349dcacb718b7becf5a60e6d44863f29a2ac58b"
+  revision = "b0d479192170e381d77993453197623555b46be1"
 
 [solve-meta]
   analyzer-name = "dep"
