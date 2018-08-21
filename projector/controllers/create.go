@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/sysco-middleware/commander"
 	"github.com/sysco-middleware/commander-boilerplate/projector/common"
@@ -10,6 +11,7 @@ import (
 
 // OnCreatedUser handles a "created" event
 func OnCreatedUser(command *commander.Event) {
+	fmt.Println("commander received command")
 	var user models.Users
 
 	dataParseError := json.Unmarshal(command.Data, &user)

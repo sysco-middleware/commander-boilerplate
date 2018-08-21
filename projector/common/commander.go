@@ -2,8 +2,11 @@ package common
 
 import (
 	"os"
+	"strings"
+	"time"
 
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/Shopify/sarama"
+	cluster "github.com/bsm/sarama-cluster"
 	"github.com/sysco-middleware/commander"
 )
 
@@ -12,24 +15,24 @@ var Commander *commander.Commander
 
 // OpenCommander opens a new commander interface
 func OpenCommander() *commander.Commander {
-	servers := os.Getenv("KAFKA_SERVERS")
+	brokers := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
 	group := os.Getenv("KAFKA_GROUP")
 
-	producer := commander.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": servers,
-	})
+	producerConfig := sarama.NewConfig()
+	consumerConfig := cluster.NewConfig()
 
-	consumer := commander.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers":               servers,
-		"group.id":                        group,
-		"go.application.rebalance.enable": true,
-		"default.topic.config":            kafka.ConfigMap{"auto.offset.reset": "earliest"},
-	})
+	producerConfig.Version = sarama.V1_1_0_0
+	consumerConfig.Version = sarama.V1_1_0_0
 
 	Commander = &commander.Commander{
-		Consumer: consumer,
-		Producer: producer,
+		ConsumerGroup: group,
+		Timeout:       5 * time.Second,
+		EventTopic:    os.Getenv("COMMANDER_EVENT_TOPIC"),
+		CommandTopic:  os.Getenv("COMMANDER_COMMAND_TOPIC"),
 	}
+
+	Commander.NewProducer(brokers, producerConfig)
+	Commander.NewConsumer(brokers, consumerConfig)
 
 	return Commander
 }
