@@ -17,7 +17,6 @@ func main() {
 
 	router.HandleFunc("/find/{id}", rest.Use(controllers.FindByID, Authentication)).Methods("GET")
 	router.HandleFunc("/find/", rest.Use(controllers.FindAll, Authentication)).Methods("GET")
-	router.HandleFunc("/find/name/last/{lastName}", rest.Use(controllers.FindByLastName, Authentication)).Methods("GET")
 
 	server := &http.Server{
 		Addr:         os.Getenv("HOST_ADDRESS"),

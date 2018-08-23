@@ -44,14 +44,14 @@
   revision = "04140366298a54a039076d798123ffa108fff46c"
 
 [[projects]]
-  branch = "master"
   name = "github.com/lib/pq"
   packages = [
     ".",
     "hstore",
     "oid"
   ]
-  revision = "90697d60dd844d5ef6ff15135d0203f65d2f53b8"
+  revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -62,8 +62,8 @@
 [[projects]]
   branch = "master"
   name = "github.com/sysco-middleware/commander-boilerplate"
-  packages = ["projector/models"]
-  revision = "bc162a6fa2ea246bb7087534827a804cd356d1a3"
+  packages = ["models"]
+  revision = "27a2038d8b70f9cfe04428edfa831382cc87a9e7"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
@@ -74,6 +74,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d863a76f516f082eb482393c4fc08703548bc2e5191dd3049f9f74810681e286"
+  inputs-digest = "7f5ab0936727cfb6d1ac0035831d3e698b3c646942967cf391779cfdc2c3084e"
   solver-name = "gps-cdcl"
   solver-version = 1
