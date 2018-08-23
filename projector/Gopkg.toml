@@ -34,12 +34,12 @@
   version = "1.9.1"
 
 [[constraint]]
-  name = "github.com/satori/go.uuid"
-  version = "1.2.0"
+  branch = "master"
+  name = "github.com/sysco-middleware/commander"
 
 [[constraint]]
   branch = "master"
-  name = "github.com/sysco-middleware/commander"
+  name = "github.com/sysco-middleware/commander-boilerplate"
 
 [prune]
   go-tests = true

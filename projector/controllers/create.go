@@ -2,31 +2,28 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/sysco-middleware/commander"
+	"github.com/sysco-middleware/commander-boilerplate/models"
 	"github.com/sysco-middleware/commander-boilerplate/projector/common"
-	"github.com/sysco-middleware/commander-boilerplate/projector/models"
 )
 
 // OnCreatedUser handles a "created" event
-func OnCreatedUser(command *commander.Event) {
-	fmt.Println("commander received command")
-	var user models.Users
-
-	dataParseError := json.Unmarshal(command.Data, &user)
-	// Parse the data back to a struct
-	if dataParseError != nil {
-		// Optionally could you panic on a error
-		// panic(dataParseError)
+func OnCreatedUser(event *commander.Event) {
+	req := models.UserCreatedEvent{}
+	err := json.Unmarshal(event.Data, &req)
+	if err != nil {
 		return
 	}
 
-	query := common.Database.Create(&user)
-	// A user already exists if a error occures
+	user := models.UserView{
+		ID:        req.ID,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+	}
+
+	query := common.Database.Save(&user)
 	if query.Error != nil {
-		// Optionally could you panic on a error
-		// panic(query.Error)
 		return
 	}
 }

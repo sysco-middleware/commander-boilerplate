@@ -59,14 +59,14 @@
   revision = "04140366298a54a039076d798123ffa108fff46c"
 
 [[projects]]
-  branch = "master"
   name = "github.com/lib/pq"
   packages = [
     ".",
     "hstore",
     "oid"
   ]
-  revision = "90697d60dd844d5ef6ff15135d0203f65d2f53b8"
+  revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/pierrec/lz4"
@@ -93,11 +93,17 @@
   branch = "master"
   name = "github.com/sysco-middleware/commander"
   packages = ["."]
-  revision = "815be4d3496be7b87a19ea413aad5dc14471020c"
+  revision = "26e3037526bb5e043754bd11ec2377004754a741"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/sysco-middleware/commander-boilerplate"
+  packages = ["models"]
+  revision = "93d43278d5ba4ff546fb02350b7f673b17d2e417"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "79dd4ce0080058b7f3175c803f06714027f5bf08ca0ff4b72c0071c32804b671"
+  inputs-digest = "8e6f233a9007079f4b73d08db861b4664799ff7c0a2c291c6784ef576a1afbad"
   solver-name = "gps-cdcl"
   solver-version = 1
