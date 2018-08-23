@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -19,6 +20,12 @@ type UserModel struct {
 // TableName returns the table name of UserModal
 func (user *UserModel) TableName() string {
 	return "ServiceUsersView"
+}
+
+// BeforeCreate generates required data before creating
+func (user *UserModel) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("ID", uuid.NewV4())
+	return nil
 }
 
 // UserView gorm database table struct
