@@ -3,46 +3,36 @@ package controllers
 import (
 	"encoding/json"
 
-	uuid "github.com/satori/go.uuid"
 	"github.com/sysco-middleware/commander"
 	"github.com/sysco-middleware/commander-boilerplate/logic/common"
-	"github.com/sysco-middleware/commander-boilerplate/logic/models"
+	"github.com/sysco-middleware/commander-boilerplate/models"
 )
 
-// CreateModel is used during a "create" command
-type CreateModel struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-}
-
 // OnCreateUser handles a "create" command
-func OnCreateUser(command *commander.Command) {
-	var data CreateModel
+func OnCreateUser(command *commander.Command) *commander.Event {
+	req := models.UserCreatedCommand{}
+	err := json.Unmarshal(command.Data, &req)
 
-	// Parse the data back to a struct
-	err := json.Unmarshal(command.Data, &data)
 	if err != nil {
-		command.NewError("DataParseError", nil)
-		return
+		return command.NewErrorEvent("DataParseError", nil)
 	}
 
-	// Prepare a new user
-	key := uuid.NewV4()
 	user := models.UserModel{
-		ID:        &key,
-		FirstName: data.FirstName,
-		LastName:  data.LastName,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
 	}
 
-	query := common.Database.Create(&user)
-	// A user already exists if a error occures
+	query := common.Database.Save(&user)
 	if query.Error != nil {
-		event := command.NewError("UserExists", nil)
-		common.Commander.ProduceEvent(event)
-		return
+		return command.NewErrorEvent("UserExists", nil)
 	}
 
-	res, _ := json.Marshal(user)
-	event := command.NewEvent("Created", 1, key, res)
-	common.Commander.ProduceEvent(event)
+	event := models.UserCreatedEvent{
+		ID:        user.ID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}
+
+	res, _ := json.Marshal(event)
+	return command.NewEvent("Created", 1, *user.ID, res)
 }

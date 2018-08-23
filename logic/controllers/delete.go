@@ -2,35 +2,26 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 
-	uuid "github.com/satori/go.uuid"
 	"github.com/sysco-middleware/commander"
 	"github.com/sysco-middleware/commander-boilerplate/logic/common"
-	"github.com/sysco-middleware/commander-boilerplate/logic/models"
+	"github.com/sysco-middleware/commander-boilerplate/models"
 )
 
-// DeleteModal used during a "delete" command
-type DeleteModal struct {
-	ID *uuid.UUID `json:"id"`
-}
-
 // OnDeleteUser handles a "delete" command
-func OnDeleteUser(command *commander.Command) {
-	var data DeleteModal
+func OnDeleteUser(command *commander.Command) *commander.Event {
+	req := models.UserDeleteCommand{}
+	err := json.Unmarshal(command.Data, &req)
 
-	err := json.Unmarshal(command.Data, &data)
 	if err != nil {
-		command.NewError("DataParseError", nil)
-		return
+		return command.NewErrorEvent("DataParseError", nil)
 	}
-	fmt.Println("id:", data.ID)
 
 	user := models.UserModel{
-		ID: data.ID,
+		ID: req.ID,
 	}
+
 	common.Database.Delete(&user)
 
-	event := command.NewEvent("Deleted", 1, command.Key, nil)
-	common.Commander.ProduceEvent(event)
+	return command.NewEvent("Deleted", 1, command.Key, nil)
 }

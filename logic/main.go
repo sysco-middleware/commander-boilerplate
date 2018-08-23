@@ -4,7 +4,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/sysco-middleware/commander-boilerplate/logic/common"
 	"github.com/sysco-middleware/commander-boilerplate/logic/controllers"
-	"github.com/sysco-middleware/commander-boilerplate/logic/models"
+	"github.com/sysco-middleware/commander-boilerplate/models"
 )
 
 func main() {
@@ -14,7 +14,6 @@ func main() {
 	database.AutoMigrate(&models.UserModel{})
 
 	commander.NewCommandHandle("Create", controllers.OnCreateUser)
-	commander.NewCommandHandle("Update", controllers.OnUpdateUser)
 	commander.NewCommandHandle("Delete", controllers.OnDeleteUser)
 
 	go commander.Consume()
